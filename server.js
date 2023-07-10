@@ -166,117 +166,179 @@ function addDepartment() {
 
 // Function to add a role
 function addRole() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "title",
-        message: "Enter the title of the role:",
-      },
-      {
-        type: "input",
-        name: "salary",
-        message: "Enter the salary for the role:",
-      },
-      {
-        type: "input",
-        name: "departmentId",
-        message: "Enter the department ID for the role:",
-      },
-    ])
-    .then((answers) => {
-      connection.query(
-        "INSERT INTO role SET ?",
+  // Fetch department IDs from the database
+  connection.query("SELECT id, name FROM department", (err, results) => {
+    if (err) {
+      console.error("Error retrieving departments: ", err);
+      return;
+    }
+
+    // Store the department IDs and names in an array
+    const departments = results.map((department) => ({
+      name: department.name,
+      value: department.id,
+    }));
+
+    inquirer
+      .prompt([
         {
-          title: answers.title,
-          salary: answers.salary,
-          department_id: answers.departmentId,
+          type: "input",
+          name: "title",
+          message: "Enter the title of the role:",
         },
-        (err, result) => {
-          if (err) {
-            console.error("Error adding role: ", err);
-            return;
+        {
+          type: "input",
+          name: "salary",
+          message: "Enter the salary for the role:",
+        },
+        {
+          type: "list",
+          name: "departmentId",
+          message: "Select the department for the role:",
+          choices: departments,
+        },
+      ])
+      .then((answers) => {
+        connection.query(
+          "INSERT INTO role SET ?",
+          {
+            title: answers.title,
+            salary: answers.salary,
+            department_id: answers.departmentId,
+          },
+          (err, result) => {
+            if (err) {
+              console.error("Error adding role: ", err);
+              return;
+            }
+            console.log("Role added successfully!");
+            promptUser();
           }
-          console.log("Role added successfully!");
-          promptUser();
-        }
-      );
-    });
+        );
+      });
+  });
 }
+
 
 // Function to add an employee
 function addEmployee() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "firstName",
-        message: "Enter the employee's first name:",
-      },
-      {
-        type: "input",
-        name: "lastName",
-        message: "Enter the employee's last name:",
-      },
-      {
-        type: "input",
-        name: "roleId",
-        message: "Enter the role ID for the employee:",
-      },
-      {
-        type: "input",
-        name: "managerId",
-        message: "Enter the manager ID for the employee (optional):",
-      },
-    ])
-    .then((answers) => {
-      connection.query(
-        "INSERT INTO employee SET ?",
+  // Fetch role IDs from the database
+  connection.query("SELECT id, title FROM role", (err, results) => {
+    if (err) {
+      console.error("Error retrieving roles: ", err);
+      return;
+    }
+
+    // Store the role IDs and titles in an array
+    const roles = results.map((role) => ({
+      name: role.title,
+      value: role.id,
+    }));
+
+    inquirer
+      .prompt([
         {
-          first_name: answers.firstName,
-          last_name: answers.lastName,
-          role_id: answers.roleId,
-          manager_id: answers.managerId || null,
+          type: "input",
+          name: "firstName",
+          message: "Enter the employee's first name:",
         },
-        (err, result) => {
-          if (err) {
-            console.error("Error adding employee: ", err);
-            return;
+        {
+          type: "input",
+          name: "lastName",
+          message: "Enter the employee's last name:",
+        },
+        {
+          type: "list",
+          name: "roleId",
+          message: "Select the role for the employee:",
+          choices: roles,
+        },
+        {
+          type: "input",
+          name: "managerId",
+          message: "Enter the manager ID for the employee (optional):",
+        },
+      ])
+      .then((answers) => {
+        connection.query(
+          "INSERT INTO employee SET ?",
+          {
+            first_name: answers.firstName,
+            last_name: answers.lastName,
+            role_id: answers.roleId,
+            manager_id: answers.managerId || null,
+          },
+          (err, result) => {
+            if (err) {
+              console.error("Error adding employee: ", err);
+              return;
+            }
+            console.log("Employee added successfully!");
+            promptUser();
           }
-          console.log("Employee added successfully!");
-          promptUser();
-        }
-      );
-    });
+        );
+      });
+  });
 }
+
 
 // Function to update an employee role
 function updateEmployeeRole() {
-  inquirer
-    .prompt([
-      {
-        type: "input",
-        name: "employeeId",
-        message: "Enter the ID of the employee to update:",
-      },
-      {
-        type: "input",
-        name: "roleId",
-        message: "Enter the new role ID for the employee:",
-      },
-    ])
-    .then((answers) => {
-      connection.query(
-        "UPDATE employee SET role_id = ? WHERE id = ?",
-        [answers.roleId, answers.employeeId],
-        (err, result) => {
-          if (err) {
-            console.error("Error updating employee role: ", err);
-            return;
-          }
-          console.log("Employee role updated successfully!");
-          promptUser();
-        }
-      );
+  // Fetch employee IDs from the database
+  connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employee", (err, empResults) => {
+    if (err) {
+      console.error("Error retrieving employees: ", err);
+      return;
+    }
+
+    // Fetch role IDs from the database
+    connection.query("SELECT id, title FROM role", (err, roleResults) => {
+      if (err) {
+        console.error("Error retrieving roles: ", err);
+        return;
+      }
+
+      // Store the employee IDs and names in an array
+      const employees = empResults.map((employee) => ({
+        name: employee.name,
+        value: employee.id,
+      }));
+
+      // Store the role IDs and titles in an array
+      const roles = roleResults.map((role) => ({
+        name: role.title,
+        value: role.id,
+      }));
+
+      inquirer
+        .prompt([
+          {
+            type: "list",
+            name: "employeeId",
+            message: "Select the employee to update:",
+            choices: employees,
+          },
+          {
+            type: "list",
+            name: "roleId",
+            message: "Select the new role for the employee:",
+            choices: roles,
+          },
+        ])
+        .then((answers) => {
+          connection.query(
+            "UPDATE employee SET role_id = ? WHERE id = ?",
+            [answers.roleId, answers.employeeId],
+            (err, result) => {
+              if (err) {
+                console.error("Error updating employee role: ", err);
+                return;
+              }
+              console.log("Employee role updated successfully!");
+              promptUser();
+            }
+          );
+        });
     });
+  });
 }
