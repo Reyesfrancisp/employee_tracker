@@ -37,6 +37,7 @@ function promptUser() {
           "Add a role",
           "Add an employee",
           "Update an employee role",
+          "Update employee manager",
           "Exit"
         ]
       }
@@ -64,6 +65,9 @@ function promptUser() {
           break;
         case "Update an employee role":
           updateEmployeeRole();
+          break;
+        case "Update employee manager":
+          updateEmployeeManager();
           break;
         case "Exit":
           connection.end(); // Close the database connection
@@ -340,5 +344,91 @@ function updateEmployeeRole() {
           );
         });
     });
+  });
+}
+
+// Function to update an employee's manager
+function updateEmployeeManager() {
+  // Fetch employee IDs from the database
+  connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employee", (err, empResults) => {
+    if (err) {
+      console.error("Error retrieving employees: ", err);
+      return;
+    }
+
+  inquirer
+    .prompt([
+      {
+        type: "list",
+        name: "employeeId",
+        message: "Select the employee to update:",
+        choices: empResults.map((employee) => ({
+          name: employee.name,
+          value: employee.id,
+        })),
+      },
+      {
+        type: "list",
+        name: "managerId",
+        message: "Select the new manager for the employee:",
+        choices: empResults.map((employee) => ({
+          name: employee.name,
+          value: employee.id,
+        })),
+      },
+    ])
+    .then((answers) => {
+      connection.query(
+        "UPDATE employee SET manager_id = ? WHERE id = ?",
+        [answers.managerId, answers.employeeId],
+        (err, result) => {
+          if (err) {
+            console.error("Error updating employee manager: ", err);
+            return;
+          }
+          console.log("Employee manager updated successfully!");
+          promptUser();
+        }
+      );
+    });
+  });
+}
+
+// Function to view employees by manager
+function viewEmployeesByManager() {
+  // Fetch manager IDs and names from the database
+  connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employee", (err, empResults) => {
+    if (err) {
+      console.error("Error retrieving employees: ", err);
+      return;
+    }
+
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "managerId",
+          message: "Select a manager to view their employees:",
+          choices: empResults.map((employee) => ({
+            name: employee.name,
+            value: employee.id,
+          })),
+        },
+      ])
+      .then((answers) => {
+        connection.query(
+          "SELECT * FROM employee WHERE manager_id = ?",
+          [answers.managerId],
+          (err, results) => {
+            if (err) {
+              console.error("Error retrieving employees: ", err);
+              return;
+            }
+            console.log("Employees under selected manager:");
+            console.table(results);
+            promptUser();
+          }
+        );
+      });
   });
 }
