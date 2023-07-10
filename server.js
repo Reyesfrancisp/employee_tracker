@@ -5,8 +5,8 @@ const inquirer = require("inquirer");
 const connection = mysql.createConnection({
   host: "localhost",
   port: 3306,
-  user: "your_username",
-  password: "your_password",
+  user: "root",
+  password: "",
   database: "employee_tracker_db"
 });
 
@@ -81,6 +81,19 @@ function viewAllDepartments() {
       return;
     }
     console.log("All Departments:");
+    console.table(results);
+    promptUser();
+  });
+}
+
+// Function to view all roles
+function viewAllRoles() {
+  connection.query("SELECT * FROM role", (err, results) => {
+    if (err) {
+      console.error("Error retrieving roles: ", err);
+      return;
+    }
+    console.log("All Roles:");
     console.table(results);
     promptUser();
   });
