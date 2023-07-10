@@ -1,22 +1,22 @@
-const mysql = require('mysql2');
-const inquirer = require('inquirer');
+const mysql = require("mysql2");
+const inquirer = require("inquirer");
 
 // Create a MySQL connection
 const connection = mysql.createConnection({
-  host: 'localhost',
+  host: "localhost",
   port: 3306,
-  user: 'your_username',
-  password: 'your_password',
-  database: 'employee_tracker_db'
+  user: "your_username",
+  password: "your_password",
+  database: "employee_tracker_db"
 });
 
 // Connect to the MySQL server
 connection.connect((err) => {
   if (err) {
-    console.error('Error connecting to the database: ', err);
+    console.error("Error connecting to the database: ", err);
     return;
   }
-  console.log('Connected to the database!');
+  console.log("Connected to the database!");
   // Prompt user for the desired action
   promptUser();
 });
@@ -26,48 +26,48 @@ function promptUser() {
   inquirer
     .prompt([
       {
-        type: 'list',
-        name: 'action',
-        message: 'What would you like to do?',
+        type: "list",
+        name: "action",
+        message: "What would you like to do?",
         choices: [
-          'View all departments',
-          'View all roles',
-          'View all employees',
-          'Add a department',
-          'Add a role',
-          'Add an employee',
-          'Update an employee role',
-          'Exit'
+          "View all departments",
+          "View all roles",
+          "View all employees",
+          "Add a department",
+          "Add a role",
+          "Add an employee",
+          "Update an employee role",
+          "Exit"
         ]
       }
     ])
     .then((answers) => {
       // Perform the selected action
       switch (answers.action) {
-        case 'View all departments':
+        case "View all departments":
           viewAllDepartments();
           break;
-        case 'View all roles':
+        case "View all roles":
           viewAllRoles();
           break;
-        case 'View all employees':
+        case "View all employees":
           viewAllEmployees();
           break;
-        case 'Add a department':
+        case "Add a department":
           addDepartment();
           break;
-        case 'Add a role':
+        case "Add a role":
           addRole();
           break;
-        case 'Add an employee':
+        case "Add an employee":
           addEmployee();
           break;
-        case 'Update an employee role':
+        case "Update an employee role":
           updateEmployeeRole();
           break;
-        case 'Exit':
+        case "Exit":
           connection.end(); // Close the database connection
-          console.log('Disconnected from the database.');
+          console.log("Disconnected from the database.");
           break;
       }
     });
@@ -75,12 +75,12 @@ function promptUser() {
 
 // Function to view all departments
 function viewAllDepartments() {
-  connection.query('SELECT * FROM department', (err, results) => {
+  connection.query("SELECT * FROM department", (err, results) => {
     if (err) {
-      console.error('Error retrieving departments: ', err);
+      console.error("Error retrieving departments: ", err);
       return;
     }
-    console.log('All Departments:');
+    console.log("All Departments:");
     console.table(results);
     promptUser();
   });
