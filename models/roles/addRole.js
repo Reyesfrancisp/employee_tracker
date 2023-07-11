@@ -1,4 +1,6 @@
 const connection = require("../../db/connection");
+const inquirer = require("inquirer");
+
 // Function to add a role
   function addRole() {
     // Fetch department IDs from the database
@@ -13,7 +15,7 @@ const connection = require("../../db/connection");
         name: department.name,
         value: department.id,
       }));
-  
+  console.log("Inquirer should prompt here.");
       inquirer
         .prompt([
           {

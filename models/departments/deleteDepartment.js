@@ -1,4 +1,5 @@
 const connection = require("../../db/connection");
+const inquirer = require("inquirer");
 
 // Function to delete a department
 function deleteDepartment() {
@@ -31,7 +32,6 @@ function deleteDepartment() {
                 return;
               }
               console.log("Department deleted successfully!");
-              promptUser();
             }
           );
         });

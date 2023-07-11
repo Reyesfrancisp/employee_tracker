@@ -1,5 +1,6 @@
 const connection = require("../../db/connection");
-  
+const inquirer = require("inquirer");
+
 // Function to update an employee's manager
 function updateEmployeeManager() {
     // Fetch employee IDs from the database

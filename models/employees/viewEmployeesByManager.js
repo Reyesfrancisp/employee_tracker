@@ -1,5 +1,6 @@
 const connection = require("../../db/connection");
-  
+const inquirer = require("inquirer");
+
   // Function to view employees by manager
 function viewEmployeesByManager() {
     // Fetch manager IDs and names from the database
@@ -32,7 +33,6 @@ function viewEmployeesByManager() {
               }
               console.log("Employees under selected manager:");
               console.table(results);
-              promptUser();
             }
           );
         });

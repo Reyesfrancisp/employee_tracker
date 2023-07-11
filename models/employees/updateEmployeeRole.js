@@ -1,34 +1,35 @@
 const connection = require("../../db/connection");
+const inquirer = require("inquirer");
 
-  
-  // Function to update an employee role
-  function updateEmployeeRole() {
+// Function to update an employee role
+function updateEmployeeRole() {
+  return new Promise((resolve, reject) => {
     // Fetch employee IDs from the database
     connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employee", (err, empResults) => {
       if (err) {
-        console.error("Error retrieving employees: ", err);
+        reject(err);
         return;
       }
-  
+
       // Fetch role IDs from the database
       connection.query("SELECT id, title FROM role", (err, roleResults) => {
         if (err) {
-          console.error("Error retrieving roles: ", err);
+          reject(err);
           return;
         }
-  
+
         // Store the employee IDs and names in an array
         const employees = empResults.map((employee) => ({
           name: employee.name,
           value: employee.id,
         }));
-  
+
         // Store the role IDs and titles in an array
         const roles = roleResults.map((role) => ({
           name: role.title,
           value: role.id,
         }));
-  
+
         inquirer
           .prompt([
             {
@@ -50,15 +51,17 @@ const connection = require("../../db/connection");
               [answers.roleId, answers.employeeId],
               (err, result) => {
                 if (err) {
-                  console.error("Error updating employee role: ", err);
+                  reject(err);
                   return;
                 }
                 console.log("Employee role updated successfully!");
+                resolve();
               }
             );
           });
       });
     });
-  }
+  });
+}
 
-  module.exports = updateEmployeeRole;
+module.exports = updateEmployeeRole;

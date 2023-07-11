@@ -1,4 +1,5 @@
 const connection = require("../../db/connection");
+const inquirer = require("inquirer");
 
 // Function to delete an employee
 function deleteEmployee() {
