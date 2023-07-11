@@ -1,15 +1,16 @@
 const connection = require("../../db/connection");
 const inquirer = require("inquirer");
 
-  // Function to view employees by manager
+// Function to view employees by manager
 function viewEmployeesByManager() {
-    // Fetch manager IDs and names from the database
+  // Fetch manager IDs and names from the database
+  return new Promise((resolve, reject) => {
     connection.query("SELECT id, CONCAT(first_name, ' ', last_name) AS name FROM employee", (err, empResults) => {
       if (err) {
         console.error("Error retrieving employees: ", err);
         return;
       }
-  
+
       inquirer
         .prompt([
           {
@@ -37,6 +38,7 @@ function viewEmployeesByManager() {
           );
         });
     });
-  }
+  });
+}
 
-  module.exports = viewEmployeesByManager;
+module.exports = viewEmployeesByManager;

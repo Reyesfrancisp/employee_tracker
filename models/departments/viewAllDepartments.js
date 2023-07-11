@@ -16,4 +16,4 @@ function viewAllDepartments() {
 }
 
 
-  module.exports = viewAllDepartments;
+module.exports = viewAllDepartments;
