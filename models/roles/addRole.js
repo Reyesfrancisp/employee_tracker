@@ -1,19 +1,6 @@
-
-// Function to view all roles
-function viewAllRoles() {
-    connection.query("SELECT * FROM role", (err, results) => {
-      if (err) {
-        console.error("Error retrieving roles: ", err);
-        return;
-      }
-      console.log("All Roles:");
-      console.table(results);
-      promptUser();
-    });
-  }
-
-  // Function to add a role
-function addRole() {
+const connection = require("../../db/connection");
+// Function to add a role
+  function addRole() {
     // Fetch department IDs from the database
     connection.query("SELECT id, name FROM department", (err, results) => {
       if (err) {
@@ -60,11 +47,10 @@ function addRole() {
                 return;
               }
               console.log("Role added successfully!");
-              promptUser();
             }
           );
         });
     });
   }
 
-  modules.export
+  module.exports = addRole;

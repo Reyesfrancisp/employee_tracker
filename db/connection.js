@@ -1,5 +1,4 @@
 const mysql = require("mysql2");
-const inquirer = require("inquirer");
 
 
 // Create a MySQL connection
