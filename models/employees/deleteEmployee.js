@@ -33,7 +33,6 @@ function deleteEmployee() {
                 return;
               }
               console.log("Employee deleted successfully!");
-              promptUser();
             }
           );
         });

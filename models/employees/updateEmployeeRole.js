@@ -54,7 +54,6 @@ function updateEmployeeRole() {
                   reject(err);
                   return;
                 }
-                console.log("Employee role updated successfully!");
                 resolve();
               }
             );

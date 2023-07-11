@@ -1,10 +1,10 @@
 const connection = require("../../db/connection");
 const inquirer = require("inquirer");
-
 // Function to add a role
-function addRole() {
+
+function addRole(promptUser) {
   // Fetch department IDs from the database
-  return new Promise((resolve, reject) => {
+
     connection.query("SELECT id, name FROM department", (err, results) => {
       if (err) {
         console.error("Error retrieving departments: ", err);
@@ -50,11 +50,12 @@ function addRole() {
                 return;
               }
               console.log("Role added successfully!");
+              promptUser();
             }
           );
         });
     });
-  });
-}
+  };
+
 
 module.exports = addRole;
