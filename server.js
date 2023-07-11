@@ -5,6 +5,7 @@ const connection = require("./db/connection");
 const addDepartment = require("./models/departments/addDepartment");
 const viewAllDepartments = require("./models/departments/viewAllDepartments");
 const deleteDepartment = require("./models/departments/deleteDepartment");
+const viewDepartmentBudget = require("./models/departments/viewDepartmentBudget");
 
 // roles
 const viewAllRoles = require("./models/roles/viewAllRoles");
@@ -40,6 +41,7 @@ const promptUser = () => {
           "Delete role",
           "Delete employee",
           "View employees by manager",
+          ,
           "Exit",
         ],
       },
@@ -82,6 +84,9 @@ const promptUser = () => {
           break;
         case "View employees by manager":
           viewEmployeesByManager(promptUser);
+          break;
+          case "View the budget of a department":
+          viewDepartmentBudget()
           break;
         case "Exit":
           connection.end(); // Close the database connection
