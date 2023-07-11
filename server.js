@@ -57,49 +57,112 @@ function promptUser() {
       // Perform the selected action
       switch (answers.action) {
         case "View all departments":
-          viewAllDepartments();
+          viewAllDepartments().then(() => {
+            // Proceed with other code here
+            promptUser();
+          }).catch((error) => {
+            console.error("Error viewing all departments:", error);
+            promptUser();
+          });
           break;
         case "View all roles":
-          viewAllRoles();
+          viewAllRoles().then(() => {
+            // Proceed with other code here
+            promptUser();
+          }).catch((error) => {
+            console.error("Error viewing all roles:", error);
+            promptUser();
+          });
           break;
         case "View all employees":
-          viewAllEmployees();
+          viewAllEmployees().then(() => {
+            // Proceed with other code here
+            promptUser();
+          }).catch((error) => {
+            console.error("Error viewing all employees:", error);
+            promptUser();
+          });
           break;
         case "Add a department":
-          addDepartment();
+          addDepartment().then(() => {
+            console.log("Department added successfully!");
+            promptUser();
+          }).catch((error) => {
+            console.error("Error adding department:", error);
+            promptUser();
+          });
           break;
         case "Add a role":
-          addRole();
-          console.log("left the add role");
+          addRole().then(() => {
+            console.log("Role added successfully!");
+            promptUser();
+          }).catch((error) => {
+            console.error("Error adding role:", error);
+            promptUser();
+          });
           break;
         case "Add an employee":
-          addEmployee();
+          addEmployee().then(() => {
+            console.log("Employee added successfully!");
+            promptUser();
+          }).catch((error) => {
+            console.error("Error adding employee:", error);
+            promptUser();
+          });
           break;
         case "Update an employee role":
-          updateEmployeeRole()
-          .then(() => {
-            console.log("Employee role update completed.");
-            // Proceed with other code here
-          })
-          .catch((error) => {
+          updateEmployeeRole().then(() => {
+            console.log("Employee role updated successfully!");
+            promptUser();
+          }).catch((error) => {
             console.error("Error updating employee role:", error);
-            // Handle the error
+            promptUser();
           });
           break;
         case "Update employee manager":
-          updateEmployeeManager();
+          updateEmployeeManager().then(() => {
+            console.log("Employee manager updated successfully!");
+            promptUser();
+          }).catch((error) => {
+            console.error("Error updating employee manager:", error);
+            promptUser();
+          });
           break;
         case "Delete department":
-          deleteDepartment();
+          deleteDepartment().then(() => {
+            console.log("Department deleted successfully!");
+            promptUser();
+          }).catch((error) => {
+            console.error("Error deleting department:", error);
+            promptUser();
+          });
           break;
         case "Delete role":
-          deleteRole();
+          deleteRole().then(() => {
+            console.log("Role deleted successfully!");
+            promptUser();
+          }).catch((error) => {
+            console.error("Error deleting role:", error);
+            promptUser();
+          });
           break;
         case "Delete employee":
-          deleteEmployee();
+          deleteEmployee().then(() => {
+            console.log("Employee deleted successfully!");
+            promptUser();
+          }).catch((error) => {
+            console.error("Error deleting employee:", error);
+            promptUser();
+          });
           break;
         case "View employees by manager":
-          viewEmployeesByManager();
+          viewEmployeesByManager().then(() => {
+            // Proceed with other code here
+            promptUser();
+          }).catch((error) => {
+            console.error("Error viewing employees by manager:", error);
+            promptUser();
+          });
           break;
         case "Exit":
           connection.end(); // Close the database connection

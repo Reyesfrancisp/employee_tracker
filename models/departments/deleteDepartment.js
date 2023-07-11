@@ -3,38 +3,44 @@ const inquirer = require("inquirer");
 
 // Function to delete a department
 function deleteDepartment() {
-    // Fetch department IDs and names from the database
+  return new Promise((resolve, reject) => {
     connection.query("SELECT id, name FROM department", (err, results) => {
       if (err) {
         console.error("Error retrieving departments: ", err);
-        return;
-      }
-  
-      inquirer
-        .prompt([
-          {
-            type: "list",
-            name: "departmentId",
-            message: "Select a department to delete:",
-            choices: results.map((department) => ({
-              name: department.name,
-              value: department.id,
-            })),
-          },
-        ])
-        .then((answers) => {
-          connection.query(
-            "DELETE FROM department WHERE id = ?",
-            [answers.departmentId],
-            (err, result) => {
-              if (err) {
-                console.error("Error deleting department: ", err);
-                return;
+        reject(err);
+      } else {
+        inquirer
+          .prompt([
+            {
+              type: "list",
+              name: "departmentId",
+              message: "Select a department to delete:",
+              choices: results.map((department) => ({
+                name: department.name,
+                value: department.id,
+              })),
+            },
+          ])
+          .then((answers) => {
+            connection.query(
+              "DELETE FROM department WHERE id = ?",
+              [answers.departmentId],
+              (err, result) => {
+                if (err) {
+                  console.error("Error deleting department: ", err);
+                  reject(err);
+                } else {
+                  console.log("Department deleted successfully!");
+                  resolve(result);
+                }
               }
-              console.log("Department deleted successfully!");
-            }
-          );
-        });
+            );
+          })
+          .catch((err) => {
+            reject(err);
+          });
+      }
     });
-  }
+  });
+}
 module.exports = deleteDepartment;
