@@ -41,7 +41,7 @@ const promptUser = () => {
           "Delete role",
           "Delete employee",
           "View employees by manager",
-          ,
+          "View the budget of a department",
           "Exit",
         ],
       },
@@ -86,7 +86,7 @@ const promptUser = () => {
           viewEmployeesByManager(promptUser);
           break;
           case "View the budget of a department":
-          viewDepartmentBudget()
+          viewDepartmentBudget(promptUser);
           break;
         case "Exit":
           connection.end(); // Close the database connection
